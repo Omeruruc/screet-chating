@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramazan Bereket Takvimi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="mosque-bg"></div>
+    <div class="container">
+        <header>
+            <h1>Ramazan Bereket Takvimi</h1>
+            <div class="current-day">
+                <span id="currentDay">1. Gün</span>
+                <span id="currentDate"></span>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="zikir">Günlük Zikirler</button>
+            <button class="tab-btn" data-tab="dua">Namazda Okunacak Dualar</button>
+            <button class="tab-btn" data-tab="yemek">İftar Menüleri</button>
+        </nav>
+
+        <main>
+            <!-- Zikirler Bölümü -->
+            <section id="zikir" class="tab-content active">
+                <div class="day-selector">
+                    <button id="prevDay">&lt;</button>
+                    <span id="selectedDay">1. Gün</span>
+                    <button id="nextDay">&gt;</button>
+                </div>
+                <div class="zikir-list">
+                    <!-- Zikirler JavaScript ile eklenecek -->
+                </div>
+            </section>
+
+            <!-- Dualar Bölümü -->
+            <section id="dua" class="tab-content">
+                <div class="dua-categories">
+                    <button class="dua-category active" data-category="sabah">Sabah Namazı</button>
+                    <button class="dua-category" data-category="ogle">Öğle Namazı</button>
+                    <button class="dua-category" data-category="ikindi">İkindi Namazı</button>
+                    <button class="dua-category" data-category="aksam">Akşam Namazı</button>
+                    <button class="dua-category" data-category="yatsi">Yatsı Namazı</button>
+                    <button class="dua-category" data-category="teravih">Teravih Namazı</button>
+                </div>
+                <div class="dua-content">
+                    <!-- Dualar JavaScript ile eklenecek -->
+                </div>
+            </section>
+
+            <!-- Yemek Menüleri Bölümü -->
+            <section id="yemek" class="tab-content">
+                <div class="menu-calendar">
+                    <!-- Menü takvimi JavaScript ile eklenecek -->
+                </div>
+                <div class="recipe-details">
+                    <!-- Tarif detayları JavaScript ile eklenecek -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="progress-container">
+                <div class="progress-text">Ramazan İlerlemesi</div>
+                <div class="progress-bar">
+                    <div class="progress" id="ramazanProgress"></div>
+                </div>
+                <div class="progress-days">
+                    <span id="completedDays">0</span>/30 Gün
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 

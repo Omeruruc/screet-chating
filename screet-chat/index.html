@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gizli İletişim Ağı</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="hacker-bg"></div>
+
+    <!-- Giriş Ekranı -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <h2>GİZLİ ERİŞİM NOKTASI</h2>
+            <form>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Erişim Kodu" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="text" id="keyword" placeholder="Güvenlik Anahtarı" required>
+                </div>
+                <button type="submit" class="access-btn">ERİŞİM İSTE</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ana Ekran -->
+    <div id="mainScreen" style="display: none;">
+        <nav class="nav-bar">
+            <button class="nav-btn active" data-section="messages">
+                <i class="fas fa-terminal"></i> MESAJLAR
+            </button>
+            <button class="nav-btn" data-section="photos">
+                <i class="fas fa-image"></i> FOTOĞRAFLAR
+            </button>
+            <button class="nav-btn logout">
+                <i class="fas fa-power-off"></i> ÇIKIŞ
+            </button>
+        </nav>
+
+        <div id="messages" class="section active">
+            <div class="messages-container">
+                <div class="messages-list"></div>
+                <form class="message-form">
+                    <input type="text" placeholder="Mesajınızı yazın...">
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="photos" class="section">
+            <div class="photos-container">
+                <div class="upload-area">
+                    <label for="photoInput" class="upload-btn">
+                        <i class="fas fa-upload"></i> FOTOĞRAF YÜKLE
+                    </label>
+                    <input type="file" id="photoInput" accept="image/*" hidden>
+                </div>
+                <div class="photo-gallery"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
