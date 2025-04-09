@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohbet Uygulaması</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .message .user {
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        .message .time {
+            font-size: 0.8em;
+            color: #666;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        #roomList {
+            margin-bottom: 20px;
+        }
+        .room {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .room:hover {
+            background-color: #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sohbet Uygulaması</h1>
+        <input type="text" id="username" placeholder="Kullanıcı adınızı girin">
+        <button onclick="joinChat()">Katıl</button>
+        
+        <div id="roomList"></div>
+        
+        <input type="text" id="roomName" placeholder="Oda adı">
+        <button onclick="createRoom()">Oda Oluştur</button>
+        
+        <div id="messages"></div>
+        <input type="text" id="message" placeholder="Mesajınızı yazın">
+        <button onclick="sendMessage()">Gönder</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let currentRoom = null;
+
+        function joinChat() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                socket.emit('join', username);
+                document.getElementById('username').disabled = true;
+                document.querySelector('button').disabled = true;
+            }
+        }
+
+        function createRoom() {
+            const roomName = document.getElementById('roomName').value;
+            if (roomName) {
+                socket.emit('createRoom', roomName);
+                joinRoom(roomName);
+            }
+        }
+
+        function joinRoom(roomName) {
+            currentRoom = roomName;
+            socket.emit('joinRoom', roomName);
+            document.getElementById('messages').innerHTML = '';
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (message && currentRoom) {
+                socket.emit('message', {
+                    room: currentRoom,
+                    message: message
+                });
+                document.getElementById('message').value = '';
+            }
+        }
+
+        socket.on('userList', (users) => {
+            console.log('Kullanıcı listesi:', users);
+        });
+
+        socket.on('roomList', (rooms) => {
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '';
+            rooms.forEach(room => {
+                const roomElement = document.createElement('div');
+                roomElement.className = 'room';
+                roomElement.textContent = room;
+                roomElement.onclick = () => joinRoom(room);
+                roomList.appendChild(roomElement);
+            });
+        });
+
+        socket.on('message', (data) => {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.innerHTML = `
+                <span class="user">${data.user}</span>
+                <span class="time">${new Date(data.timestamp).toLocaleTimeString()}</span>
+                <div>${data.message}</div>
+            `;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        socket.on('userJoined', (username) => {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.innerHTML = `${username} sohbete katıldı`;
+            messages.appendChild(messageElement);
+        });
+
+        socket.on('userLeft', (username) => {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.innerHTML = `${username} sohbetten ayrıldı`;
+            messages.appendChild(messageElement);
+        });
+
+        socket.on('userJoinedRoom', (username) => {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.innerHTML = `${username} odaya katıldı`;
+            messages.appendChild(messageElement);
+        });
+    </script>
+</body>
+</html> 
